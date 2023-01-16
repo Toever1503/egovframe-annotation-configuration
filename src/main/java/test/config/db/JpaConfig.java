@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.annotation.RequestScope;
 
 @Configuration
@@ -42,11 +45,48 @@ public class JpaConfig {
 		super();
 		System.out.println("JpaConfiguration created");
 	}
+	
+	@Bean
+	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+	public PageableProxy pageableProxy(@RequestParam(name="page", required = false) Integer page, @RequestParam(name = "size", required = false) Integer size,
+			@RequestParam(name="sort", required = false) String sort) {
+		System.out.println("creating PageableProxy");
+		List<Order> colOrders = new ArrayList<Sort.Order>();
 
-	@Bean("pageCustom")
+		if (page == null)
+			page = 0;
+		else if (page < 0)
+			page = 0;
+		
+		if (size == null || size < 0)
+			size = 20;
+
+		if (sort != null) {
+			String[] sortList = sort.split(";");
+			for (String item : sortList) {
+				String[] sortCol = item.split(",");
+				if (sortCol.length != 2)
+					throw new RuntimeException("Sort param is invalid");
+				try {
+					colOrders.add(new Order(Sort.Direction.fromString(sortCol[1]), sortCol[0]));
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+					throw new RuntimeException(
+							"Sort direction is invalid: column: " + sortCol[0] + ", direction: " + sortCol[1]);
+				}
+			}
+		}
+		Pageable pageable = PageRequest.of(page, size, Sort.by(colOrders));
+		System.out.println("create page proxy completed: " + pageable);
+		
+		return new PageableProxy(pageable);
+	}
+
+//	@Bean("pageCustom")
 //	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-	@RequestScope
-	@Primary
+//	@RequestScope
+//	@Primary
 	public Pageable pageable(@RequestParam(defaultValue = "0", required = false) int page,
 			@RequestParam(defaultValue = "20", required = false) int size,
 			@RequestParam(defaultValue = "", required = false) String sort) {
