@@ -2,18 +2,17 @@ package test.web;
 
 import java.io.IOException;
 
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import test.repositories.UserRepository;
 
@@ -21,16 +20,17 @@ import test.repositories.UserRepository;
 @RequestMapping("/upload")
 public class TestController {
 
-	public TestController(UserRepository userRepository) {
+	public TestController(EntityManagerFactory emf, UserRepository userRepository) {
 		super();
 		// TODO Auto-generated constructor stub
 		System.out.println("upload controller created");
-		System.out.println("test repo: "+ userRepository.toString());
-		SimpleJpaRepository<T, ID>
+		System.out.println(userRepository.findByUsername("test1"));
+		System.out.println(userRepository.findByUsername("test2"));
+		System.out.println(userRepository.findById(3l));
 	}
 
 	@RequestMapping("test")
-	public Object test(Pageable page) {
+	public Object test(@Qualifier("pageCustom") @Autowired Pageable page) {
 		return page;
 	}
 

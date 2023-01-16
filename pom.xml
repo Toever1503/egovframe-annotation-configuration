@@ -138,6 +138,21 @@
         </dependency>
         -->
         
+        <!-- db connector -->
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+        </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
+		<dependency>
+		    <groupId>org.mariadb.jdbc</groupId>
+		    <artifactId>mariadb-java-client</artifactId>
+		    <version>3.1.1</version>
+		</dependency>
+        
+        
         <!-- for upload files -->
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
@@ -159,6 +174,7 @@
 		    <artifactId>spring-data-jpa</artifactId>
 		    <version>2.7.7</version>
 		</dependency>
+		<!-- jpa2.7.7 ->  hibernate 5.2.18.Final  -->
         <dependency>
 	      <groupId>org.springframework.data</groupId>
 	      <artifactId>spring-data-bom</artifactId>
@@ -166,6 +182,14 @@
 	      <scope>import</scope>
 	      <type>pom</type>
 	    </dependency>
+	    
+	    <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>5.6.14.Final</version>
+		</dependency>
+	    
 	    
 	    <!-- config lombok  -->
 	    <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->

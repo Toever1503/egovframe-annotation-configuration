@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/path/api/{id}")
 public class PathVariableController {
-	
+
 	public PathVariableController() {
 		super();
 		// TODO Auto-generated constructor stub
