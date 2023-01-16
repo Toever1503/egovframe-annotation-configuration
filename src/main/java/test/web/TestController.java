@@ -37,7 +37,7 @@ public class TestController {
 	@RequestMapping("test")
 	public Object test() {
 		System.out.println("page request ->: " + this.pageableProxy.getPageable());
-		return "OKSS offf";
+		return this.pageableProxy.getPageable().toString();
 	}
 
 	@PostMapping("file")

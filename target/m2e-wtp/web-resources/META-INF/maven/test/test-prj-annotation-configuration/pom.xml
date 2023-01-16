@@ -200,7 +200,12 @@
 		    <scope>provided</scope>
 		</dependency>
 	    
-        
+        <!-- cglib required for @configuration annotation -->
+	   <dependency>
+	            <groupId>cglib</groupId>
+	            <artifactId>cglib</artifactId>
+	            <version>3.0</version>
+	    </dependency>
 	</dependencies>
 
 	<build>

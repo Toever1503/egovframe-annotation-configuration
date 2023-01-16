@@ -45,43 +45,7 @@ public class JpaConfig {
 		super();
 		System.out.println("JpaConfiguration created");
 	}
-	
-	@Bean
-	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-	public PageableProxy pageableProxy(@RequestParam(name="page", required = false) Integer page, @RequestParam(name = "size", required = false) Integer size,
-			@RequestParam(name="sort", required = false) String sort) {
-		System.out.println("creating PageableProxy");
-		List<Order> colOrders = new ArrayList<Sort.Order>();
 
-		if (page == null)
-			page = 0;
-		else if (page < 0)
-			page = 0;
-		
-		if (size == null || size < 0)
-			size = 20;
-
-		if (sort != null) {
-			String[] sortList = sort.split(";");
-			for (String item : sortList) {
-				String[] sortCol = item.split(",");
-				if (sortCol.length != 2)
-					throw new RuntimeException("Sort param is invalid");
-				try {
-					colOrders.add(new Order(Sort.Direction.fromString(sortCol[1]), sortCol[0]));
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-					throw new RuntimeException(
-							"Sort direction is invalid: column: " + sortCol[0] + ", direction: " + sortCol[1]);
-				}
-			}
-		}
-		Pageable pageable = PageRequest.of(page, size, Sort.by(colOrders));
-		System.out.println("create page proxy completed: " + pageable);
-		
-		return new PageableProxy(pageable);
-	}
 
 //	@Bean("pageCustom")
 //	@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -103,7 +67,8 @@ public class JpaConfig {
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-					throw new RuntimeException("Sort direction is invalid: column: "+ sortCol[0] + ", direction: " + sortCol[1]);
+					throw new RuntimeException(
+							"Sort direction is invalid: column: " + sortCol[0] + ", direction: " + sortCol[1]);
 				}
 			}
 		}
